@@ -16,4 +16,4 @@ jobs:
           armbian_target: "build"
           armbian_ui: "minimal" # server xfce
           armbian_runner_clean: "yes" # recommended for Github runners
-          armbian_kernel_branch: "edge"
+          armbian_kernel_branch: "edge" 

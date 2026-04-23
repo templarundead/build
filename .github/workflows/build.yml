@@ -13,7 +13,7 @@ jobs:
         uses: armbian/build@main
         with:
           armbian_token: ${{ secrets.GITHUB_TOKEN }}
-          armbian_board: "orangepi6"
+          armbian_board: "orangepi6plus"
           armbian_release: "forky"
           armbian_target: "build"
           armbian_ui: "minimal"

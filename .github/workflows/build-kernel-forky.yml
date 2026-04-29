@@ -1,4 +1,4 @@
-name: Build Armbian Kernel (Forky)
+name: Build Armbian Kernel
 on:
   workflow_dispatch:
 
@@ -16,11 +16,11 @@ jobs:
         with:
           armbian_token: ${{ secrets.GITHUB_TOKEN }}
           armbian_board: "orangepi5-plus"
-          armbian_release: "forky"
-          armbian_target: "kernel"      # Собираем только ядро
+          armbian_release: "trixie"      # Поменял с forky на trixie для стабильности
+          armbian_target: "kernel"       # Собираем только ядро
           armbian_ui: "minimal"
           armbian_kernel_branch: "edge"
-          armbian_runner_clean: "no"    # Важно для подхвата userpatches
+          armbian_runner_clean: "no"
 
       - name: Upload Kernel Packages
         uses: actions/upload-artifact@v4
@@ -28,3 +28,12 @@ jobs:
           name: armbian-kernel-packages
           path: build/output/debs/*.deb
           if-no-files-found: error
+      - name: Verify Kernel Config
+        run: |
+          # Ищем файл конфига в папке сборки
+          CONF_FILE=$(find build/output/debs -name "linux-image-*" -exec ar x {} data.tar.xz \; -exec tar -tJf data.tar.xz | grep config- \; | head -n 1)
+          ar x build/output/debs/linux-image-*.deb data.tar.xz
+          tar -xJf data.tar.xz ./boot/config-*
+          echo "Checking ONDEMAND TUNABLES in $(ls boot/config-*)"
+          grep "CONFIG_CPU_FREQ_GOV_ONDEMAND" boot/config-*
+

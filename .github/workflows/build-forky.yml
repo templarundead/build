@@ -1,0 +1,23 @@
+name: Build Armbian Image
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Это самое важное для создания релизов
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Armbian
+        uses: armbian/build@main
+        with:
+          armbian_token: ${{ secrets.GITHUB_TOKEN }}
+          armbian_board: "orangepi5-plus"
+          armbian_release: "forky"
+          armbian_target: "build"
+          armbian_ui: "minimal"
+          armbian_runner_clean: "yes"
+          armbian_kernel_branch: "edge"

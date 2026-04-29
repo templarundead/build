@@ -16,24 +16,31 @@ jobs:
         with:
           armbian_token: ${{ secrets.GITHUB_TOKEN }}
           armbian_board: "orangepi5-plus"
-          armbian_release: "trixie"      # Поменял с forky на trixie для стабильности
-          armbian_target: "kernel"       # Собираем только ядро
+          armbian_release: "trixie"
+          armbian_target: "kernel"
           armbian_ui: "minimal"
           armbian_kernel_branch: "edge"
           armbian_runner_clean: "no"
+
+      - name: Verify Kernel Config
+        run: |
+          # Переходим в папку с дебами
+          cd build/output/debs/
+          IMAGE_PKG=$(ls linux-image-edge-rockchip64_*.deb | head -n 1)
+          echo "Checking package: $IMAGE_PKG"
+          
+          # Распаковываем конфиг
+          ar x "$IMAGE_PKG" data.tar.xz
+          tar -xJf data.tar.xz --wildcards './boot/config-*'
+          
+          echo "--- FINAL KERNEL CONFIG CHECK ---"
+          grep "CONFIG_CPU_FREQ_GOV_ONDEMAND" boot/config-*
+          echo "---------------------------------"
 
       - name: Upload Kernel Packages
         uses: actions/upload-artifact@v4
         with:
           name: armbian-kernel-packages
+          # Указываем правильный путь для DEB пакетов
           path: build/output/debs/*.deb
           if-no-files-found: error
-      - name: Verify Kernel Config
-        run: |
-          # Ищем файл конфига в папке сборки
-          CONF_FILE=$(find build/output/debs -name "linux-image-*" -exec ar x {} data.tar.xz \; -exec tar -tJf data.tar.xz | grep config- \; | head -n 1)
-          ar x build/output/debs/linux-image-*.deb data.tar.xz
-          tar -xJf data.tar.xz ./boot/config-*
-          echo "Checking ONDEMAND TUNABLES in $(ls boot/config-*)"
-          grep "CONFIG_CPU_FREQ_GOV_ONDEMAND" boot/config-*
-

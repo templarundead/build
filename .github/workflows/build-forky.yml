@@ -1,4 +1,4 @@
-name: Build Armbian Image
+name: Build Armbian Image (Forky)
 on:
   workflow_dispatch:
 

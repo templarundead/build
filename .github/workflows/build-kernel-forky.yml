@@ -23,7 +23,7 @@ jobs:
           armbian_release: "bookworm"
           armbian_target: "kernel"
           armbian_ui: "minimal"
-          armbian_kernel_branch: "edge"
+          armbian_kernel_branch: "current"
           armbian_runner_clean: "no"
           armbian_extra_args: "INSTALL_HEADERS=no" 
 

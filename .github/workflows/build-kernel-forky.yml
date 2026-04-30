@@ -21,6 +21,7 @@ jobs:
           armbian_ui: "minimal"
           armbian_kernel_branch: "edge"
           armbian_runner_clean: "no"
+          armbian_extra_args: "INSTALL_HEADERS=no" 
 
       - name: Verify Kernel Config
         run: |

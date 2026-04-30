@@ -20,7 +20,7 @@ jobs:
         with:
           armbian_token: ${{ secrets.GITHUB_TOKEN }}
           armbian_board: "orangepi5-plus"
-          armbian_release: "trixie"
+          armbian_release: "bookworm"
           armbian_target: "kernel"
           armbian_ui: "minimal"
           armbian_kernel_branch: "edge"

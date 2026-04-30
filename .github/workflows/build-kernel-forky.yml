@@ -13,6 +13,10 @@ jobs:
 
       - name: Build Armbian Kernel
         uses: armbian/build@main
+        env:
+          # Пробрасываем аргументы напрямую в скрипт compile.sh
+          SKIP_EXTERNAL_HEADERS: "yes"
+          INSTALL_HEADERS: "no"
         with:
           armbian_token: ${{ secrets.GITHUB_TOKEN }}
           armbian_board: "orangepi5-plus"
